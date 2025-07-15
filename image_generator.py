@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 
 # 🛡️ Replace with your Hugging Face token
-HUGGINGFACE_TOKEN = "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"
+HUGGINGFACE_TOKEN = "HF_token"
 
 API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
 headers = {

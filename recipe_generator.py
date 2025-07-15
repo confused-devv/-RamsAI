@@ -2,44 +2,29 @@ import ollama
 
 def generate_recipe(dish_type, fusion_type, key_ingredient):
     prompt = f"""
-You are a world-class chef AI known as RamsAI that is know for being angry and funny.
+You are a fusion chef AI.
 
-Dish type: {dish_type}
-Fusion cuisines: {"surprise me" if "surprise" in fusion_type.lower() else fusion_type}
-Key ingredient: {key_ingredient or "none"}
+Create a unique {dish_type} using {'surprise cuisines' if 'surprise' in fusion_type.lower() else fusion_type}.
+Include the ingredient: {key_ingredient if key_ingredient else 'any creative ingredients'}.
 
-Respond in **this format only**:
-
+Respond in the following format:
+oh my fucking god all i want you to do is give me an ingredient list is that so hard for you to fucking do
 Dish Name: <title>
 Cuisines: <Cuisine 1> + <Cuisine 2>
 Ingredients:
-- ingredient 1
-- ingredient 2
+- <ingredient 1>
+- <ingredient 2>
 Instructions:
-step-by-step instructions here
+<step-by-step instructions>
 """
 
-    response = ollama.chat(
-        model="mistral",
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    text = response["message"]["content"].strip()
-    lines = text.splitlines()
-
-    # Parse response
-    title = lines[0].replace("Dish Name:", "").strip()
-    cuisines = lines[1].replace("Cuisines:", "").strip().split("+")
-    ing_start = lines.index("Ingredients:") + 1
-    instr_start = lines.index("Instructions:")
-    ingredients = [line.replace("-", "").strip() for line in lines[ing_start:instr_start] if line.strip()]
-    instructions = "\n".join(lines[instr_start + 1:]).strip()
+    response = ollama.chat(model="mistral", messages=[
+        {"role": "user", "content": prompt}
+    ])
 
     return {
-        "title": title,
-        "cuisines": [c.strip() for c in cuisines],
-        "ingredients": ingredients,
-        "instructions": instructions
+        "title": "Fusion Dish",
+        "cuisines": [],
+        "ingredients": [],
+        "instructions": response['message']['content'].strip()
     }
-
-#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

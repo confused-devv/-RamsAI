@@ -34,8 +34,7 @@ if __name__ == "__main__":
             for item in recipe['ingredients']:
                 print(f"  • {item}")
 
-            print("\n📜 Instructions:")
-            print(recipe['instructions'])
+
             break
         else:
             print("⚠️ Recipe too similar, retrying...\n")
