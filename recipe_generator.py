@@ -8,7 +8,7 @@ Create a unique {dish_type} using {'surprise cuisines' if 'surprise' in fusion_t
 Include the ingredient: {key_ingredient if key_ingredient else 'any creative ingredients'}.
 
 Respond in the following format:
-oh my fucking god all i want you to do is give me an ingredient list is that so hard for you to fucking do
+
 Dish Name: <title>
 Cuisines: <Cuisine 1> + <Cuisine 2>
 Ingredients:
@@ -18,13 +18,24 @@ Instructions:
 <step-by-step instructions>
 """
 
-    response = ollama.chat(model="mistral", messages=[
-        {"role": "user", "content": prompt}
-    ])
+    response = ollama.chat(
+        model="mistral",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    text = response['message']['content']
+    lines = text.strip().splitlines()
+
+    title = lines[0].replace("Dish Name:", "").strip()
+    cuisines = lines[1].replace("Cuisines:", "").strip().split("+")
+    ing_start = lines.index("Ingredients:") + 1
+    instr_start = lines.index("Instructions:")
+    ingredients = [line.lstrip("- ").strip() for line in lines[ing_start:instr_start]]
+    instructions = "\n".join(lines[instr_start+1:]).strip()
 
     return {
-        "title": "Fusion Dish",
-        "cuisines": [],
-        "ingredients": [],
-        "instructions": response['message']['content'].strip()
+        "title": title,
+        "cuisines": [c.strip() for c in cuisines],
+        "ingredients": ingredients,
+        "instructions": instructions
     }
